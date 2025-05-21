@@ -1,23 +1,40 @@
 cmake_minimum_required(VERSION 3.8)
-project(SensingRigs_communicator)
+project(sensingrigs_communicator)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+# Required dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
-find_package(SDL2 REQUIRED)
-find_package(yaml-cpp REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
-
-include_directories(
-  include
-  ${SDL2_INCLUDE_DIRS}
+# === Message and Service Definitions ===
+set(msg_files
+  "msg/MonoIR.msg"
+  "msg/Odomometr.msg"
+  "msg/StereoIR.msg"
+  "msg/SensingRigs.msg"
 )
 
-# _______CLIENT_______
+set(srv_files
+  "srv/FileService.srv"
+)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  ${srv_files}
+  DEPENDENCIES std_msgs
+)
+
+# === Include paths ===
+include_directories(
+  include
+)
+
+# === CLIENT ===
 add_executable(client
   src/client.cpp
   src/ServiceHandler.cpp
@@ -28,16 +45,14 @@ ament_target_dependencies(client
   std_msgs
 )
 
-target_link_libraries(client
-  ${SDL2_LIBRARIES}
-  yaml-cpp
-)
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
+add_dependencies(client ${cpp_typesupport_target})
 
 install(TARGETS client
   DESTINATION lib/${PROJECT_NAME}
 )
 
-# _______SERVICE_______
+# === SERVICE ===
 add_executable(service
   src/service.cpp
   src/FileReader.cpp
@@ -50,17 +65,17 @@ ament_target_dependencies(service
   std_msgs
 )
 
-target_link_libraries(service
-  ${SDL2_LIBRARIES}
-  yaml-cpp
-)
+add_dependencies(service ${cpp_typesupport_target})
 
 install(TARGETS service
   DESTINATION lib/${PROJECT_NAME}
 )
 
+# === Install headers ===
 install(DIRECTORY include/
   DESTINATION include/
 )
 
+# === Export interfaces ===
+ament_export_dependencies(rosidl_default_runtime)
 ament_package()
