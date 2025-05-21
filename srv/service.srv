@@ -1,0 +1,5 @@
+# Request
+float32 id
+---
+# Response
+SensingRigs_communicator/msg/SensingRigs data
