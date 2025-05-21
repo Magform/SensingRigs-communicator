@@ -1,3 +1,3 @@
 MonoIR mono
-Odomometry odom 
+Odometry odom 
 StereoIR stereo

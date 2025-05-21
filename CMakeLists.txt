@@ -10,23 +10,24 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(rosidl_default_generators REQUIRED)
+find_package(builtin_interfaces REQUIRED)
 
 # === Message and Service Definitions ===
 set(msg_files
   "msg/MonoIR.msg"
-  "msg/Odomometr.msg"
+  "msg/Odometry.msg"
   "msg/StereoIR.msg"
   "msg/SensingRigs.msg"
 )
 
 set(srv_files
-  "srv/FileService.srv"
+  "srv/Service.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
   ${msg_files}
   ${srv_files}
-  DEPENDENCIES std_msgs
+  DEPENDENCIES builtin_interfaces std_msgs
 )
 
 # === Include paths ===
