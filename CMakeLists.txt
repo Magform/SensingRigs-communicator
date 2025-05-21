@@ -17,7 +17,6 @@ set(msg_files
   "msg/MonoIR.msg"
   "msg/Odometry.msg"
   "msg/StereoIR.msg"
-  "msg/SensingRigs.msg"
 )
 
 set(srv_files

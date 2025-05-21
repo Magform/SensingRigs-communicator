@@ -2,4 +2,7 @@
 float32 id
 ---
 # Response
-sensingrigs_communicator/msg/SensingRigs data
+sensingrigs_communicator/MonoIR[] IRdata
+sensingrigs_communicator/Odometry[] ODMdata
+sensingrigs_communicator/StereoID[] STRdata
+int32 status
