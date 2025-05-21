@@ -1,5 +1,5 @@
 # Date and time of capture
-string<=19  timestamp
+Time  timestamp
 # Name of the detected object
 string<=10  label
 # How accurate is the prediction
