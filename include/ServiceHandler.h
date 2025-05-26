@@ -11,8 +11,8 @@ class ServiceHandler : public rclcpp::Node{
 public:
     using DataCallback = std::function<void(
         std::vector<sensingrigs_communicator::msg::MonoIR>&,
+        std::vector<sensingrigs_communicator::msg::StereoIR>&,
         std::vector<sensingrigs_communicator::msg::Odometry>&,
-        std::vector<sensingrigs_communicator::msg::StereoID>&,
         int32_t&
     )>;
 

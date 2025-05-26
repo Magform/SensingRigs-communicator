@@ -3,15 +3,15 @@
 #include "FileReader.h"
 
 #define ID 1
-#define file_name test.txt
+#define file_name "test.txt"
 
 void getDataFromFileCallback(
-    std::vector<sensingrigs_communicator::msg::MonoIR>& irdata,
-    std::vector<sensingrigs_communicator::msg::Odometry>& odmdata,
-    std::vector<sensingrigs_communicator::msg::StereoID>& strdata,
+    std::vector<sensingrigs_communicator::msg::MonoIR>& mono_data,
+    std::vector<sensingrigs_communicator::msg::StereoID>& stereo_data,
+    std::vector<sensingrigs_communicator::msg::Odometry>& odom_data,
     int32_t& status){
         
-    getDataFromFile(file_name, irdata, odmdata, strdata, status);
+    getDataFromFile(file_name, mono_data, stereo_data, odom_data, status);
 }
 
 int main(int argc, char **argv){

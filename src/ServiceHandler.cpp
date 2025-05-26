@@ -20,6 +20,6 @@ void ServiceHandler::handle_request(
 
     if (request->id == _id)
     {
-        _data_callback(response->irdata, response->odmdata, response->strdata, response->status);
+        _data_callback(response->mono_data, response->stereo_data, response->odm_data, response->status);
     }
 }
