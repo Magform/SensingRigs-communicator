@@ -7,11 +7,11 @@
 
 void getDataFromFileCallback(
     std::vector<sensingrigs_communicator::msg::MonoIR>& mono_data,
-    std::vector<sensingrigs_communicator::msg::StereoID>& stereo_data,
+    std::vector<sensingrigs_communicator::msg::StereoIR>& stereo_data,
     std::vector<sensingrigs_communicator::msg::Odometry>& odom_data,
     int32_t& status){
         
-    getDataFromFile(file_name, mono_data, stereo_data, odom_data, status);
+    // getDataFromFile(file_name, mono_data, stereo_data, odom_data, status);
 }
 
 int main(int argc, char **argv){

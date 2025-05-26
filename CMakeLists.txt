@@ -20,7 +20,7 @@ set(msg_files
 )
 
 set(srv_files
-  "srv/Service.srv"
+  "srv/DataQuery.srv"
 )
 
 rosidl_generate_interfaces(${PROJECT_NAME}
@@ -35,28 +35,28 @@ include_directories(
 )
 
 # === CLIENT ===
-add_executable(client
-  src/client.cpp
-  src/ServiceHandler.cpp
-)
+#add_executable(client
+#  src/client.cpp
+#  src/ServiceHandler.cpp
+#)
 
-ament_target_dependencies(client
-  rclcpp
-  std_msgs
-)
+#ament_target_dependencies(client
+#  rclcpp
+#  std_msgs
+#)
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
-add_dependencies(client ${cpp_typesupport_target})
+#add_dependencies(client ${cpp_typesupport_target})
 
-install(TARGETS client
-  DESTINATION lib/${PROJECT_NAME}
-)
+#install(TARGETS client
+#  DESTINATION lib/${PROJECT_NAME}
+#)
 
 # === SERVICE ===
 add_executable(service
   src/service.cpp
-  src/FileReader.cpp
-  src/Publisher.cpp
+  # src/FileReader.cpp
+  # src/Publisher.cpp
   src/ServiceHandler.cpp
 )
 
@@ -65,7 +65,16 @@ ament_target_dependencies(service
   std_msgs
 )
 
+target_include_directories(service PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>
+  $<INSTALL_INTERFACE:include>
+)
+
 add_dependencies(service ${cpp_typesupport_target})
+
+target_link_libraries(service
+  ${cpp_typesupport_target}
+)
 
 install(TARGETS service
   DESTINATION lib/${PROJECT_NAME}

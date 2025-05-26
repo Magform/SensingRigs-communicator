@@ -1,5 +1,5 @@
-#IFNDEF SERVICE_HANDLER_H
-#DEFINE SERVICE_HANDLER_H
+#ifndef SERVICE_HANDLER_H
+#define SERVICE_HANDLER_H
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensingrigs_communicator/srv/data_query.hpp"
@@ -29,4 +29,4 @@ private:
         std::shared_ptr<sensingrigs_communicator::srv::DataQuery::Response> response);
 };
 
-#ENDIF // SERVICE_HANDLER_H
+#endif // SERVICE_HANDLER_H
