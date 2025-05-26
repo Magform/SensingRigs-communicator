@@ -3,14 +3,23 @@
 #include "FileReader.h"
 
 #define ID 1
-#define file_name data_file.txt
+#define file_name test.txt
+
+void getDataFromFileCallback(
+    std::vector<sensingrigs_communicator::msg::MonoIR>& irdata,
+    std::vector<sensingrigs_communicator::msg::Odometry>& odmdata,
+    std::vector<sensingrigs_communicator::msg::StereoID>& strdata,
+    int32_t& status){
+        
+    getDataFromFile(file_name, irdata, odmdata, strdata, status);
+}
 
 int main(int argc, char **argv){
     rclcpp::init(argc, argv);
 
-    FileReader file_reader(file_name);
+    auto data_callback = getDataFromFileCallback;
 
-    auto service_node = std::make_shared<ServiceHandler>(ID, file_reader);
+    auto service_node = std::make_shared<ServiceHandler>(ID, data_callback);
     rclcpp::spin(service_node);
 
     rclcpp::shutdown();

@@ -3,19 +3,26 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensingrigs_communicator/srv/data_query.hpp"
-#include "FileReader.h"
+#include <functional>
 
 
-class ServiceHandler : public rclcpp::Node
-{
+class ServiceHandler : public rclcpp::Node{
+    
 public:
-    ServiceHandler(int id, FileReader fileReader);
+    using DataCallback = std::function<void(
+        std::vector<sensingrigs_communicator::msg::MonoIR>&,
+        std::vector<sensingrigs_communicator::msg::Odometry>&,
+        std::vector<sensingrigs_communicator::msg::StereoID>&,
+        int32_t&
+    )>;
+
+    ServiceHandler(int id, DataCallback data_callback);
 
 private:
     rclcpp::Service<sensingrigs_communicator::srv::DataQuery>::SharedPtr _service;
 
     int _id;
-    FileReader _fileReader;
+    DataCallback _data_callback;
 
     void handle_request(
         const std::shared_ptr<sensingrigs_communicator::srv::DataQuery::Request> request,
