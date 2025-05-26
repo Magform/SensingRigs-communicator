@@ -1,12 +1,18 @@
-int main(int argc, char *argv[]) {
+#include "rclcpp/rclcpp.hpp"
+#include "ServiceHandler.h"
+#include "FileReader.h"
+
+#define ID 1
+#define file_name data_file.txt
+
+int main(int argc, char **argv){
     rclcpp::init(argc, argv);
 
-    //Wait for the ROS2 service call [file service.srv]
+    FileReader file_reader(file_name);
 
-    //If recived and the ID match with the self id start the file reader and read 
-    //    data from the file and send them to a ros2 topic
-    
-    //[Il formato dei file e' un formato msg custom]
+    auto service_node = std::make_shared<ServiceHandler>(ID, file_reader);
+    rclcpp::spin(service_node);
 
+    rclcpp::shutdown();
     return 0;
 }
