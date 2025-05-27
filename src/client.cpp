@@ -1,12 +1,46 @@
-int main(int argc, char *argv[]) {
+#include "rclcpp/rclcpp.hpp"
+#include <memory>
+#include <chrono>
+#include "sensingrigs_communicator/srv/data_query.hpp"
+
+using namespace std::chrono_literals;
+
+
+class DesertClient : public rclcpp::Node
+{
+    public:
+    DesertClient() : Node("desert_client")
+    {
+        RCLCPP_INFO(this -> get_logger(), "Client Created");
+        client = this -> create_client<sensingrigs_communicator::srv::DataQuery>("sensingrigs_communicator");
+
+    }
+    int request( float id){
+        auto request = std::make_shared<sensingrigs_communicator::srv::DataQuery::Request>();
+        request ->id = id;
+        while (!client->wait_for_service(1s)) {
+            if (!rclcpp::ok()) {
+                RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Interrupted while waiting for the service. Exiting.");
+                return 0;
+            }
+        RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "service not available, waiting again...");
+        }
+
+        auto result = client->async_send_request(request);
+        rclcpp::spin_until_future_complete(this -> get_node_base_interface(), result);
+        RCLCPP_INFO(this-> get_logger(), "RESULT ARRIVED");
+        return 1;
+    }
+    private:
+    rclcpp::Client<sensingrigs_communicator::srv::DataQuery>::SharedPtr client;
+
+};
+int main(int argc, char * argv[]){
     rclcpp::init(argc, argv);
-
-    //Wait for the ROS2 service call [file service.srv]
-    
-
-    //If recived and the ID match with the self id start the file reader and
-    //    read data from the file and send them to a ros2 topic
-    //[Il formato dei file e' un formato msg custom]
-
+    auto client_noode = std::make_shared<DesertClient>();
+    client_noode ->request(1);
+    rclcpp::spin(client_noode);
+    rclcpp::shutdown();
     return 0;
+
 }

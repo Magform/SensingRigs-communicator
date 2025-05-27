@@ -34,16 +34,13 @@ include_directories(
   include
 )
 
-# === CLIENT ===
+
 #add_executable(client
 #  src/client.cpp
 #  src/ServiceHandler.cpp
 #)
 
-#ament_target_dependencies(client
-#  rclcpp
-#  std_msgs
-#)
+
 
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 #add_dependencies(client ${cpp_typesupport_target})
@@ -51,6 +48,22 @@ rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typ
 #install(TARGETS client
 #  DESTINATION lib/${PROJECT_NAME}
 #)
+# === CLIENT ===
+add_executable(client src/client.cpp)
+ament_target_dependencies(client
+ rclcpp
+)
+target_include_directories(
+  client PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>
+  $<INSTALL_INTERFACE:include>
+)
+add_dependencies(client ${cpp_typesupport_target})
+
+target_link_libraries(client
+  ${cpp_typesupport_target}
+)
+
 
 # === SERVICE ===
 add_executable(service
@@ -60,12 +73,14 @@ add_executable(service
   src/ServiceHandler.cpp
 )
 
+
 ament_target_dependencies(service
   rclcpp
   std_msgs
 )
 
-target_include_directories(service PUBLIC
+target_include_directories(
+  service PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/rosidl_generator_cpp>
   $<INSTALL_INTERFACE:include>
 )
@@ -76,7 +91,7 @@ target_link_libraries(service
   ${cpp_typesupport_target}
 )
 
-install(TARGETS service
+install(TARGETS service client
   DESTINATION lib/${PROJECT_NAME}
 )
 
