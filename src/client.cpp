@@ -29,6 +29,11 @@ class DesertClient : public rclcpp::Node
         auto result = client->async_send_request(request);
         rclcpp::spin_until_future_complete(this -> get_node_base_interface(), result);
         RCLCPP_INFO(this-> get_logger(), "RESULT ARRIVED");
+        auto response = result.get();
+        RCLCPP_INFO(this->get_logger(), "Data received:");
+        for (const auto & mono : response->mono_data) {
+            RCLCPP_INFO(this->get_logger(), "Mono label: %s", mono.label.c_str());
+        }
         return 1;
     }
     private:
@@ -36,6 +41,8 @@ class DesertClient : public rclcpp::Node
 
 };
 int main(int argc, char * argv[]){
+    // setenv("RMW_IMPLEMENTATION", "rmw_desert", 1);
+    // setenv("DESERT_PORT", "5000", 1);
     rclcpp::init(argc, argv);
     auto client_noode = std::make_shared<DesertClient>();
     client_noode ->request(1);
