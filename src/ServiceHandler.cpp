@@ -14,12 +14,20 @@ ServiceHandler::ServiceHandler(int id, DataCallback data_callback)
 
 void ServiceHandler::handle_request(
     const std::shared_ptr<sensingrigs_communicator::srv::DataQuery::Request> request,
-    std::shared_ptr<sensingrigs_communicator::srv::DataQuery::Response> response){
-        
+    std::shared_ptr<sensingrigs_communicator::srv::DataQuery::Response> response)
+{
     RCLCPP_INFO(this->get_logger(), "Request received with id: %.2f", request->id);
 
-    if (request->id == _id)
-    {
-        _data_callback(response->mono_data, response->stereo_data, response->odm_data, response->status);
+    if (request->id == _id){
+        _data_callback(
+            response->mono_data,
+            response->stereo_data,
+            response->odm_data,
+            response->status,
+            request->start_time,
+            request->end_time);
+    }else{
+        RCLCPP_WARN(this->get_logger(), "Request id mismatch. Expected %d, got %.2f", _id, request->id);
+        response->status = -1;
     }
 }
